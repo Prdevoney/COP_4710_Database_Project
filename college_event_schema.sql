@@ -52,13 +52,13 @@ CREATE TABLE events (
     email VARCHAR(255) NOT NULL,
     phone_number VARCHAR(20) NOT NULL,
     created_by INTEGER NOT NULL REFERENCES users (user_id),
-    event_type VARCHAR(50) NOT NULL CHECK (event_type IN ('public', 'private', 'ros')),
+    event_type VARCHAR(50) NOT NULL CHECK (event_type IN ('public', 'private', 'rso')),
     university_id INTEGER REFERENCES universities (university_id),
     rso_id INTEGER REFERENCES rso (rso_id),
     approved BOOLEAN DEFAULT FALSE,
     CONSTRAINT event_type_check CHECK (
-        (event_type = 'public' AND university_id IS NOT NULL rso_id IS NULL) OR
-        (event_type = 'private' AND university_id IS NOT NULL rso_id IS NOT NULL) OR
+        (event_type = 'public' AND university_id IS NOT NULL AND rso_id IS NULL) OR
+        (event_type = 'private' AND university_id IS NOT NULL AND rso_id IS NOT NULL) OR
         (event_type = 'rso' AND university_id IS NOT NULL AND rso_id IS NOT NULL ) 
     )
 );

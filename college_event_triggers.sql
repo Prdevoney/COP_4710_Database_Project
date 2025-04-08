@@ -61,9 +61,9 @@ BEGIN
     IF NEW.event_type = 'rso' AND NEW.rso_id IS NOT NULL THEN 
         -- check if the user is an admin of the RSO
         IF NOT EXISTS (
-            SELECT 1 FROM rso_members 
+            SELECT 1 FROM rso 
             WHERE rso_id = NEW.rso_id 
-            AND admin_id = (SELECT user_id FROM users WHERE user_id = NEW.created_by)
+            AND admin_id = NEW.created_by
         ) THEN 
             RAISE EXCEPTION 'User is not an admin of the RSO.';
         END IF;
