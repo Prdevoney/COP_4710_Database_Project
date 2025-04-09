@@ -34,16 +34,32 @@ EXECUTE FUNCTION update_rso_status();
 -- Overlapping events
 CREATE FUNCTION check_event_overlap() RETURNS TRIGGER AS $$ 
 BEGIN 
-    -- check if event overlaps with existing event
-    IF EXISTS (
-        SELECT 1 FROM events
-        WHERE location_id = NEW.location_id 
-        AND event_date = NEW.event_date
-        AND (
-            (NEW.start_time < end_time AND NEW.end_time > start_time)
-        )
-    ) THEN 
-        RAISE EXCEPTION 'Event overlaps with an existing event at the same location.';
+    -- For INSERT or UPDATE, need to check for overlaps
+    IF (TG_OP = 'INSERT') THEN 
+        -- Check if event overlaps with existing event
+        IF EXISTS (
+            SELECT 1 FROM events
+            WHERE location_id = NEW.location_id 
+            AND event_date = NEW.event_date
+            AND (
+                (NEW.start_time < end_time AND NEW.end_time > start_time)
+            )
+        ) THEN 
+            RAISE EXCEPTION 'Event overlaps with an existing event at the same location.';
+        END IF;
+    ELSIF (TG_OP = 'UPDATE') THEN
+        -- For updates, exclude the current event being updated in the check
+        IF EXISTS (
+            SELECT 1 FROM events
+            WHERE location_id = NEW.location_id 
+            AND event_date = NEW.event_date
+            AND event_id != NEW.event_id  -- Exclude the event being updated
+            AND (
+                (NEW.start_time < end_time AND NEW.end_time > start_time)
+            )
+        ) THEN 
+            RAISE EXCEPTION 'Event overlaps with an existing event at the same location.';
+        END IF;
     END IF;
     RETURN NEW;
 END;

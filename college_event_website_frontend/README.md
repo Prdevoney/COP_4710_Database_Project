@@ -1,6 +1,96 @@
-# Getting Started with Create React App
+# College Events Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack web application for managing college events, built with React, TypeScript, Node.js, Express, and PostgreSQL.
+
+## Features
+
+- Authentication system with support for students and super_admin roles
+- User registration with university email domain validation
+- Login/logout functionality with session management
+- Responsive UI built with Bootstrap
+- Secure backend API with PostgreSQL database integration
+
+## Prerequisites
+
+- Node.js (v14+)
+- npm or yarn
+- PostgreSQL database
+
+## Setup Instructions
+
+### 1. Set up the database
+
+First, create a PostgreSQL database named `college_events`. Then run the provided SQL schema:
+
+```bash
+psql -U postgres -d college_events -f /path/to/college_event_schema.sql
+psql -U postgres -d college_events -f /path/to/college_event_triggers.sql
+```
+
+### 2. Configure environment variables
+
+In the server directory, copy the example environment file:
+
+```bash
+cd server
+cp .env.example .env
+```
+
+Edit `.env` to match your PostgreSQL configuration and set a proper JWT secret.
+
+### 3. Install dependencies
+
+Install dependencies for both frontend and backend:
+
+```bash
+# Install frontend dependencies
+npm install
+
+# Install backend dependencies
+cd server
+npm install
+```
+
+### 4. Run the application
+
+Start both the frontend and backend with a single command:
+
+```bash
+npm run dev
+```
+
+This will start:
+- React frontend at http://localhost:3000
+- Express backend at http://localhost:5000
+
+## Project Structure
+
+- `/src` - React frontend code
+  - `/components` - Reusable UI components
+  - `/pages` - Main application pages
+  - `/context` - React context for state management
+  - `/services` - API services and utility functions
+  - `/types` - TypeScript type definitions
+- `/server` - Node.js/Express backend
+  - `server.js` - Express application setup
+  - `db.js` - PostgreSQL database connection
+
+## Database Schema
+
+The application uses a PostgreSQL database with the following main tables:
+
+- `universities` - Information about universities
+- `users` - User accounts with authentication details
+- `rso` - Registered Student Organizations
+- `events` - Events organized by users, RSOs, or universities
+- `locations` - Event venues and locations
+
+Refer to `college_event_schema.sql` for the complete database schema.
+
+## User Types
+
+- **Student** - Can browse events, join RSOs, and create RSOs
+- **Super Admin** - Can manage the entire platform, approve events
 
 ## Available Scripts
 
@@ -8,39 +98,16 @@ In the project directory, you can run:
 
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Runs the frontend app in development mode at [http://localhost:3000](http://localhost:3000)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### `npm run server`
 
-### `npm test`
+Runs the backend server in development mode at [http://localhost:5000](http://localhost:5000)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### `npm run dev`
+
+Runs both the frontend and backend concurrently
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Builds the app for production to the `build` folder
